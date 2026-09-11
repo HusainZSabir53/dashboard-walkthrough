@@ -1,12 +1,23 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { execFileSync } = require('child_process');
-const { chromium } = require('playwright');
-const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
+const { execFileSync, execSync } = require('child_process');
 
-const FFMPEG = require('ffmpeg-static');
-const FFPROBE = require('ffprobe-static').path;
+// Loaded on first use so the skill works straight from a plugin install, where
+// nobody has run npm in lib/. Chromium lands in Playwright's own cache.
+let chromium, MsEdgeTTS, OUTPUT_FORMAT, FFMPEG, FFPROBE;
+function ensureDeps() {
+  if (chromium) return;
+  if (!fs.existsSync(path.join(__dirname, 'node_modules', 'playwright'))) {
+    console.log('First run: installing engine dependencies and Chromium (a minute or two)...');
+    execSync('npm install --no-audit --no-fund', { cwd: __dirname, stdio: 'inherit' });
+    execSync('npx playwright install chromium', { cwd: __dirname, stdio: 'inherit' });
+  }
+  ({ chromium } = require('playwright'));
+  ({ MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts'));
+  FFMPEG = require('ffmpeg-static');
+  FFPROBE = require('ffprobe-static').path;
+}
 
 const DESKTOP = { width: 1920, height: 1080 };
 const PHONE = { width: 430, height: 932 };
@@ -259,6 +270,7 @@ function mux(webm, scenes, marks, out, tail) {
 }
 
 async function runWalkthrough(config) {
+  ensureDeps();
   const {
     baseUrl, out, scenes,
     identity = 'Dashboard',

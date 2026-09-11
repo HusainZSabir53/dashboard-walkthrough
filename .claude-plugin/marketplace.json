@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dashboard-walkthrough",
+  "description": "Narrated walkthrough videos of running web dashboards, straight from Claude Code.",
+  "owner": {
+    "name": "Husain Sabir",
+    "url": "https://github.com/HusainZSabir53"
+  },
+  "plugins": [
+    {
+      "name": "dashboard-walkthrough",
+      "description": "Record a narrated 1080p walkthrough video of a running web dashboard — Playwright capture, neural TTS, cursor and caption overlays, finished MP4.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

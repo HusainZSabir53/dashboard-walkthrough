@@ -1,0 +1,13 @@
+{
+  "name": "dashboard-walkthrough",
+  "version": "1.0.0",
+  "description": "Record a narrated 1080p walkthrough video of a running web dashboard: Playwright capture with cursor and caption overlays, neural TTS voiceover, narration-driven pacing, finished MP4.",
+  "author": {
+    "name": "Husain Sabir",
+    "url": "https://github.com/HusainZSabir53"
+  },
+  "homepage": "https://github.com/HusainZSabir53/dashboard-walkthrough",
+  "repository": "https://github.com/HusainZSabir53/dashboard-walkthrough",
+  "license": "MIT",
+  "keywords": ["video", "walkthrough", "demo", "screen-recording", "playwright", "tts", "dashboard"]
+}

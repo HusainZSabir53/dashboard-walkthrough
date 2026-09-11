@@ -97,7 +97,7 @@ started — so audio stays aligned even when a step ran long. Prints the final d
 
 ```js
 const { runWalkthrough } = require(require('path').join(__dirname,
-  '../../.claude/skills/dashboard-walkthrough/lib/walkthrough.js'));
+  '../../.claude/skills/dashboard-walkthrough/skills/dashboard-walkthrough/lib/walkthrough.js'));
 
 runWalkthrough({
   baseUrl: 'http://localhost:8080',
@@ -113,11 +113,12 @@ See `templates/scenes.example.js` for a full scene list.
 
 ## First run
 
-The engine carries its own Playwright, ffmpeg and TTS. Chromium is the one thing it must
-download once:
+Nothing to install by hand. The engine carries its own Playwright, ffmpeg and TTS; on the
+first `runWalkthrough` call it runs `npm install` and fetches Chromium itself (a minute or
+two, once). To do it ahead of time instead:
 
 ```bash
-cd .claude/skills/dashboard-walkthrough/lib && npm install && npx playwright install chromium
+cd <skill>/lib && npm install && npx playwright install chromium
 ```
 
 ## Gotchas

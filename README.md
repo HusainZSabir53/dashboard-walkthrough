@@ -6,21 +6,23 @@ You write a scene list (what to show, what to say). The engine handles cursor mo
 
 ## Install
 
-Project-level (recommended — scoped to one workspace):
+As a plugin (recommended):
 
 ```bash
-git clone https://github.com/HusainZSabir53/dashboard-walkthrough .claude/skills/dashboard-walkthrough
-cd .claude/skills/dashboard-walkthrough/lib && npm install && npx playwright install chromium
+claude plugin marketplace add HusainZSabir53/dashboard-walkthrough
+claude plugin install dashboard-walkthrough
 ```
 
-Global (every project):
+Or drop the skill folder into a project directly:
 
 ```bash
-git clone https://github.com/HusainZSabir53/dashboard-walkthrough ~/.claude/skills/dashboard-walkthrough
-cd ~/.claude/skills/dashboard-walkthrough/lib && npm install && npx playwright install chromium
+git clone https://github.com/HusainZSabir53/dashboard-walkthrough /tmp/dw
+cp -r /tmp/dw/skills/dashboard-walkthrough .claude/skills/
 ```
 
-Requires Node 18+. TTS uses the free Microsoft Edge neural voices (network needed at synthesis time, no key).
+Either way there is nothing else to set up: the engine installs its own Node dependencies
+and downloads Chromium on first use. Requires Node 18+. TTS uses the free Microsoft Edge
+neural voices (network needed at synthesis time, no key).
 
 ## Use
 
@@ -33,7 +35,7 @@ node walkthrough/<app>.cjs --rehearse   # dry run: verifies every selector, no v
 node walkthrough/<app>.cjs              # synthesise narration, record, mux, encode
 ```
 
-See [SKILL.md](SKILL.md) for the four-phase process, scene format, driver API, and the gotchas learned the hard way. [templates/scenes.example.js](templates/scenes.example.js) is a starter scene list.
+See [SKILL.md](skills/dashboard-walkthrough/SKILL.md) for the four-phase process, scene format, driver API, and the gotchas learned the hard way. [templates/scenes.example.js](skills/dashboard-walkthrough/templates/scenes.example.js) is a starter scene list.
 
 ## Example: the first video it produced
 
@@ -44,13 +46,18 @@ A handover walkthrough of a government economic-intelligence dashboard (React/Vi
 - The **chatbot segment is a live round-trip**: the script opens the assistant, types a question, sends it, and holds until the streamed reply carries real figures, then narrates the sourced answer. The question was chosen so the backend answers it from a data tool rather than free-form prose — the take never depends on what an LLM might say.
 - Narration: `en-GB-RyanNeural` at −6 %, roughly 10 s per scene. Each scene holds for exactly the length of its own line, so audio and picture stay aligned with no post-editing.
 
-Everything that run taught is folded into [SKILL.md](SKILL.md): init scripts fire before `document.documentElement` exists, a shared TTS socket dies partway through a long script, `:has-text()` is not CSS, and phone view renders top-left rather than centred.
+Everything that run taught is folded into [SKILL.md](skills/dashboard-walkthrough/SKILL.md): init scripts fire before `document.documentElement` exists, a shared TTS socket dies partway through a long script, `:has-text()` is not CSS, and phone view renders top-left rather than centred.
 
 ## Layout
 
 ```
-SKILL.md                    process + house style + gotchas
-lib/walkthrough.js          engine: overlay, driver, TTS, mux
-lib/package.json            playwright · msedge-tts · ffmpeg-static · ffprobe-static
-templates/scenes.example.js starter scenes
+.claude-plugin/plugin.json          plugin manifest
+.claude-plugin/marketplace.json     lets this repo serve as its own marketplace
+skills/dashboard-walkthrough/
+  SKILL.md                          process + house style + gotchas
+  lib/walkthrough.js                engine: overlay, driver, TTS, mux, self-bootstrap
+  lib/package.json                  playwright · msedge-tts · ffmpeg-static · ffprobe-static
+  templates/scenes.example.js       starter scenes
 ```
+
+MIT — see [LICENSE](LICENSE).
