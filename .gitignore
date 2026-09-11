@@ -1,0 +1,4 @@
+node_modules/
+.walkthrough/
+*.mp4
+*.webm
